@@ -2,16 +2,280 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #0a0a0f;
-  color: #c8c8d4;
+@layer base {
+  :root {
+    --void: #050507;
+    --obsidian: #0a0a0f;
+    --slate-dark: #12121a;
+    --molten: #FF4500;
+    --resonance: #0052FF;
+    --ember: #FF6B2C;
+    --steel: #8a8a9a;
+    --chrome: #c8c8d4;
+    --white: #f0f0f5;
+    --radius: 0.25rem;
+
+    /* shadcn/ui variables mapped to Resonant Stark palette */
+    --background: 240 4% 2%;
+    --foreground: 0 0% 98%;
+    --card: 240 4% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 4% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 16 100% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4% 4%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 6%;
+    --muted-foreground: 240 3% 58%;
+    --accent: 240 4% 6%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3% 10%;
+    --input: 240 3% 12%;
+    --ring: 16 100% 50%;
+    --chart-1: 16 100% 50%;
+    --chart-2: 222 100% 50%;
+    --chart-3: 240 3% 30%;
+    --chart-4: 22 100% 60%;
+    --chart-5: 0 100% 50%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    background-color: var(--void);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-color: var(--void);
+    color: var(--chrome);
+  }
 }
 
+/* Glow utilities */
+@layer utilities {
+  .glow-molten {
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.3), 0 0 60px rgba(255, 69, 0, 0.1);
+  }
+
+  .glow-molten-sm {
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.2), 0 0 30px rgba(255, 69, 0, 0.05);
+  }
+
+  .glow-resonance {
+    box-shadow: 0 0 20px rgba(0, 82, 255, 0.3), 0 0 60px rgba(0, 82, 255, 0.1);
+  }
+
+  .glow-resonance-sm {
+    box-shadow: 0 0 10px rgba(0, 82, 255, 0.2), 0 0 30px rgba(0, 82, 255, 0.05);
+  }
+
+  .glow-molten-border {
+    box-shadow: 0 0 15px rgba(255, 69, 0, 0.25);
+    border-color: rgba(255, 69, 0, 0.6) !important;
+  }
+
+  /* Resonant pulse - expanding ripple on scroll */
+  .resonant-pulse {
+    animation: resonant-pulse 1.5s ease-out forwards;
+  }
+
+  /* Particle field background */
+  .particle-field {
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(0, 82, 255, 0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(0, 82, 255, 0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 10%, rgba(255, 69, 0, 0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 80%, rgba(0, 82, 255, 0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 40%, rgba(255, 69, 0, 0.2) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 15% 75%, rgba(0, 82, 255, 0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 15%, rgba(255, 69, 0, 0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 45%, rgba(0, 82, 255, 0.2) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 65% 55%, rgba(255, 69, 0, 0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 35%, rgba(0, 82, 255, 0.35) 0%, transparent 100%);
+    animation: particle-drift 20s ease-in-out infinite alternate;
+  }
+
+  /* Mechanical text transition */
+  .text-mechanical {
+    transition: color 0.15s ease-out, opacity 0.15s ease-out;
+  }
+
+  /* Product card hover ignite */
+  .card-ignite {
+    transition: border-color 0.2s ease-out, box-shadow 0.3s ease-out;
+  }
+  .card-ignite:hover {
+    border-color: rgba(255, 69, 0, 0.6);
+    box-shadow: 0 0 30px rgba(255, 69, 0, 0.2), 0 0 60px rgba(255, 69, 0, 0.05);
+  }
+
+  /* Product image 360 rotation on card hover */
+  .image-rotate-hover {
+    transition: transform 0.6s ease-out;
+  }
+  .group:hover .image-rotate-hover {
+    transform: rotateY(360deg);
+  }
+
+  /* Line clamping utilities */
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .line-clamp-5 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+  }
+
+  .product-text-container {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;
+  }
+
+  .product-title-clamp-1 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .product-title-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .product-description-flex {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  .product-description-flex-4 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  .title-2-lines {
+    height: 2.5rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .title-2-lines-lg {
+    height: 3.5rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+/* Keyframes */
+@keyframes resonant-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes particle-drift {
+  0% {
+    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%, -50% 50%, 50% -30%, -30% 70%, 70% -50%, -70% 30%, 30% -70%, -100% 100%, 100% -100%, -50% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes laser-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 69, 0, 0.4), 0 0 50px rgba(255, 69, 0, 0.1);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Homepage section snap - kill momentum at each major section. Native
+   browser snapping is used (not JS) so hard flicks stop one section at a
+   time on every input device. */
+html:has(.home-snap) {
+  scroll-snap-type: y proximity;
+}
+
+.home-snap [data-major-section] {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Selection color */
 ::selection {
   background-color: rgba(255, 69, 0, 0.3);
   color: #f0f0f5;
 }
 
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -27,4 +291,109 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #FF6B2C;
+}
+
+/* Loading animation */
+@keyframes pulse-molten {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-pulse-molten {
+  animation: pulse-molten 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Keep old animation name for compatibility */
+.animate-pulse-orange {
+  animation: pulse-molten 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ============================================================
+   CINEMATIC INDUSTRIAL - HUD / engineering / scroll system
+   ============================================================ */
+
+/* Lenis smooth-scroll base styles */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* HUD / technical label */
+.hud-label {
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--steel);
+  font-family: var(--font-heading);
+  line-height: 1.3;
+  pointer-events: none;
+}
+
+.hud-label .hud-value {
+  color: var(--chrome);
+}
+
+.hud-label .hud-molten {
+  color: var(--molten);
+}
+
+/* Engineering hairline / leader line */
+.leader-line {
+  background: rgba(138, 138, 154, 0.6);
+  height: 1px;
+}
+
+/* Corner bracket (measurement annotation) */
+.corner-bracket {
+  position: relative;
+}
+.corner-bracket::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  border-left: 1px solid var(--steel);
+  border-top: 1px solid var(--steel);
+}
+.corner-bracket::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  width: 12px;
+  height: 12px;
+  border-right: 1px solid var(--steel);
+  border-bottom: 1px solid var(--steel);
+}
+
+/* Slicer / G-code grid overlay */
+.slicer-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Fade-pin stop content shouldn't be clipped awkwardly */
+.pinned-scene {
+  position: relative;
+}
+
+/* Engineered uppercase numeric */
+.hud-num {
+  font-family: var(--font-heading);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+/* Quiet staged entrance helper */
+.staged-enter {
+  opacity: 0;
+  transform: translateY(16px);
 }
