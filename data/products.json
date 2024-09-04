@@ -1,0 +1,126 @@
+[
+  {
+    "id": 1,
+    "name": "3D Printed Karambit Foldable Fidget Toy",
+    "price": 8.99,
+    "material": "PLA",
+    "category": "Fidget",
+    "description": "Custom-designed smooth folding karambit fidget toy with multiple pin and blade options.",
+    "images": [
+      "https://i.postimg.cc/fTd2RDZy/Custom-Print-Design.avif",
+      "https://i.postimg.cc/t4Hr1wC5/il-1588x-N-7094550225-3a2p.avif",
+      "https://i.postimg.cc/pVpc3K6D/Protara-Printing-Image.avif"
+    ],
+    "customizations": [
+      {
+        "type": "Pin Type",
+        "label": "Pin Type",
+        "options": ["Silver", "Black", "Gold"],
+        "priceDelta": { "Silver": 0, "Black": 0, "Gold": 0 }
+      },
+      {
+        "type": "Hilt Color",
+        "label": "Hilt Color",
+        "options": ["White", "Black", "Red", "Blue", "Green"],
+        "priceDelta": { "White": 0, "Black": 0, "Red": 0, "Blue": 0, "Green": 0 }
+      },
+      {
+        "type": "Blade Color",
+        "label": "Blade Color",
+        "options": ["White", "Black", "Red", "Blue", "Green"],
+        "priceDelta": { "White": 0, "Black": 0, "Red": 0, "Blue": 0, "Green": 0 }
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Deathly Hallows Rotating Keychain",
+    "price": 3.49,
+    "material": "PLA",
+    "category": "Keychain",
+    "description": "Rotating Deathly Hallows keychain with a detailed inner-circle design.",
+    "images": [
+      "https://i.postimg.cc/BvnBH0Wx/Harry-Potter-DH-IMG-6080.jpg",
+      "https://i.postimg.cc/1z7cKjPb/Harry-Potter-DH-IMG-6081.jpg",
+      "https://i.postimg.cc/k4VNYvgG/Harry-Potter-DH-IMG-6083.jpg"
+    ],
+    "customizations": [
+      {
+        "type": "Color",
+        "label": "Color",
+        "options": ["White", "Black", "Red", "Blue", "Green"],
+        "priceDelta": { "White": 0, "Black": 0, "Red": 0, "Blue": 0, "Green": 0 }
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Chess Piece Set",
+    "price": 14.99,
+    "material": "PLA",
+    "category": "Board Game",
+    "description": "3D printed chess set featuring unique, modern pieces with a sleek aesthetic.",
+    "images": [
+      "https://i.postimg.cc/RhtbnBrM/Chess-Set-Aarush-Fixed.png",
+      "https://i.postimg.cc/QtwytMy4/Chess-Set-IMG-8590.jpg",
+      "https://i.postimg.cc/NM5nBXp2/Chess-Set-IMG-8592.jpg",
+      "https://i.postimg.cc/3wLqs1CH/Chess-Set-IMG-8593.jpg"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Avocado Keychain",
+    "price": 2.99,
+    "material": "PLA",
+    "category": "Keychain",
+    "description": "Avocado keychain with a rotating seed fidget feature. Supports The Food Lounge.",
+    "community_designed": true,
+    "images": [
+      "https://i.postimg.cc/pLCzDrBT/Full-Avocado-Aug-4-2025-Render-1.png",
+      "https://i.postimg.cc/4NzzxB7p/Full-Avocado-Aug-4-2025-from-Food-Lounge.png",
+      "https://i.postimg.cc/8zNLJMM9/Full-Avocado-Aug-4-2025-Render-2.png"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Food Lounge Logo Keychain",
+    "price": 2.99,
+    "material": "PLA",
+    "category": "Keychain",
+    "description": "Keychain featuring the Food Lounge logo, supporting a nonprofit focused on food insecurity.",
+    "community_designed": true,
+    "images": [
+      "https://i.postimg.cc/KctKP4G2/60-Scale-Parts-40mm-Aug-4-2025.png",
+      "https://i.postimg.cc/Fzb7NCWR/Food-Lounge-60-Scale-Parts-Aug-4-2025.png",
+      "https://i.postimg.cc/qR7hfT34/Food-Lounge-Keychain-Standalone.png"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Hexagon Fidget",
+    "price": 5.99,
+    "material": "PLA",
+    "category": "Fidget",
+    "description": "Hexagon fidget toy that extends and collapses smoothly for stress relief and focus.",
+    "images": [
+      "https://i.postimg.cc/02Rv9y1V/IMG-6247.jpg",
+      "https://i.postimg.cc/7Y84qZrX/IMG-6251.jpg",
+      "https://i.postimg.cc/fTnsMRQH/IMG-6249.jpg",
+      "https://i.postimg.cc/15GQX1yc/Hexagon-Superfidget-stl-2025-Oct-16-04-37-13-AM-000-Customized-View28069185284.png"
+    ],
+    "customizations": [
+      {
+        "type": "Color",
+        "label": "Color",
+        "options": ["Blue", "Yellow", "Orange", "Red", "Green", "Black"],
+        "priceDelta": { "Blue": 0, "Yellow": 0, "Orange": 0, "Red": 0, "Green": 0, "Black": 0 }
+      },
+      {
+        "type": "Size",
+        "label": "Size",
+        "options": ["Small", "Large"],
+        "priceDelta": { "Small": 0, "Large": 2.0 }
+      }
+    ]
+  }
+]
