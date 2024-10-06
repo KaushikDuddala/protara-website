@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useReducer, useEffect } from "react"
+import React, { createContext, useContext, useReducer, useEffect } from "react"
 
 export interface CartItem {
   id: string | number
@@ -15,74 +14,77 @@ export interface CartItem {
   color: string
 }
 
-interface CartState {
+export interface CartState {
   items: CartItem[]
-  total: number
   itemCount: number
+  total: number
 }
 
-type CartAction =
+export type CartAction =
   | { type: "ADD_ITEM"; payload: Omit<CartItem, "quantity"> & { quantity?: number } }
   | { type: "REMOVE_ITEM"; payload: string | number }
   | { type: "UPDATE_QUANTITY"; payload: { id: string | number; quantity: number } }
   | { type: "CLEAR_CART" }
   | { type: "LOAD_CART"; payload: CartItem[] }
 
-const CartContext = createContext<{
+export interface CartContextType {
   state: CartState
   dispatch: React.Dispatch<CartAction>
-} | null>(null)
+}
 
-function cartReducer(state: CartState, action: CartAction): CartState {
+export const CartContext = createContext<CartContextType | undefined>(undefined)
+
+function computeTotals(items: CartItem[]): Omit<CartState, "items"> {
+  return {
+    itemCount: items.reduce((sum, item) => sum + item.quantity, 0),
+    total: items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+  }
+}
+
+export function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "ADD_ITEM": {
-      // merges by id only - different colors get combined together
-      const existingItem = state.items.find((item) => item.id === action.payload.id)
+      const incoming = action.payload
+      const existingItem = state.items.find(
+        (item) => item.id === incoming.id && item.color === incoming.color
+      )
 
-      let newItems: CartItem[]
       if (existingItem) {
-        newItems = state.items.map((item) =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + (action.payload.quantity || 1) }
-            : item,
+        const items = state.items.map((item) =>
+          item.id === existingItem.id && item.color === existingItem.color
+            ? { ...item, quantity: item.quantity + (incoming.quantity ?? 1) }
+            : item
         )
-      } else {
-        newItems = [...state.items, { ...action.payload, quantity: action.payload.quantity || 1 }]
+        return { items, ...computeTotals(items) }
       }
 
-      const total = newItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0)
-
-      return { items: newItems, total, itemCount }
+      const items = [
+        ...state.items,
+        { ...incoming, quantity: incoming.quantity ?? 1 },
+      ]
+      return { items, ...computeTotals(items) }
     }
 
     case "REMOVE_ITEM": {
-      const newItems = state.items.filter((item) => item.id !== action.payload)
-      const total = newItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0)
-
-      return { items: newItems, total, itemCount }
+      const items = state.items.filter((item) => item.id !== action.payload)
+      return { items, ...computeTotals(items) }
     }
 
     case "UPDATE_QUANTITY": {
-      // can go below 1 here - gets clamped later
-      const newItems = state.items.map((item) =>
-        item.id === action.payload.id ? { ...item, quantity: action.payload.quantity } : item,
+      const items = state.items.map((item) =>
+        item.id === action.payload.id
+          ? { ...item, quantity: action.payload.quantity }
+          : item
       )
-
-      const total = newItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0)
-
-      return { items: newItems, total, itemCount }
+      return { items, ...computeTotals(items) }
     }
 
-    case "CLEAR_CART":
-      return { items: [], total: 0, itemCount: 0 }
+    case "CLEAR_CART": {
+      return { items: [], itemCount: 0, total: 0 }
+    }
 
     case "LOAD_CART": {
-      const total = action.payload.reduce((sum, item) => sum + item.price * item.quantity, 0)
-      const itemCount = action.payload.reduce((sum, item) => sum + item.quantity, 0)
-      return { items: action.payload, total, itemCount }
+      return { items: action.payload, ...computeTotals(action.payload) }
     }
 
     default:
@@ -90,29 +92,25 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, {
-    items: [],
-    total: 0,
-    itemCount: 0,
-  })
+const initialState: CartState = { items: [], itemCount: 0, total: 0 }
 
-  // load cart from localStorage on mount
+export function CartProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(cartReducer, initialState)
+
   useEffect(() => {
-    const savedCart = localStorage.getItem("protara-cart")
-    if (savedCart) {
-      try {
-        const cartItems = JSON.parse(savedCart)
-        dispatch({ type: "LOAD_CART", payload: cartItems })
-      } catch (error) {
-        console.error("Error loading cart from localStorage:", error)
+    try {
+      const cached = localStorage.getItem("cart")
+      if (cached) {
+        const items = JSON.parse(cached) as CartItem[]
+        dispatch({ type: "LOAD_CART", payload: items })
       }
+    } catch {
+      // bad cache, start fresh
     }
   }, [])
 
-  // save cart whenever it changes
   useEffect(() => {
-    localStorage.setItem("protara-cart", JSON.stringify(state.items))
+    localStorage.setItem("cart", JSON.stringify(state.items))
   }, [state.items])
 
   return <CartContext.Provider value={{ state, dispatch }}>{children}</CartContext.Provider>
@@ -120,8 +118,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
 export function useCart() {
   const context = useContext(CartContext)
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider")
-  }
+  if (!context) throw new Error("useCart must be used within a CartProvider")
   return context
 }
