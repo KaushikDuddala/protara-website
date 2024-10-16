@@ -13,11 +13,19 @@ export type Product = {
   description: string
   detailedDescription?: string
   specifications?: { [key: string]: string }
+  customizations?: Customization[]
   community_designed?: boolean
 }
 
+export type Customization = {
+  type: string
+  label: string
+  options: string[]
+  priceDelta: { [key: string]: number }
+}
+
 /**
- * Loads products with their images.
+ * Loads products with their images and customization options.
  * @returns Object with the product list plus loading and error state.
  */
 export function useProducts() {
@@ -30,15 +38,65 @@ export function useProducts() {
       try {
         setLoading(true)
 
-        // Load products with their images in a single query.
+        // Load products, their images, and customization options.
         const { data: productsData, error: productsError } = await supabase
           .from('products')
-          .select('*, product_images(url, position)')
+          .select('*')
           .order('id', { ascending: true })
 
         if (productsError) throw productsError
 
-        // Flatten the joined image rows into a plain url list, sorted by position.
+        const { data: imagesData, error: imagesError } = await supabase
+          .from('product_images')
+          .select('*')
+          .order('product_id, position')
+
+        if (imagesError) throw imagesError
+
+        const { data: customizationsData, error: customizationsError } = await supabase
+          .from('product_customizations')
+          .select(`
+            *,
+            customization_options (
+              option_value,
+              price_delta
+            )
+          `)
+
+        if (customizationsError) throw customizationsError
+
+        // Index images by product.
+        const imagesByProduct: { [key: number]: string[] } = {}
+        imagesData?.forEach((img: any) => {
+          if (!imagesByProduct[img.product_id]) {
+            imagesByProduct[img.product_id] = []
+          }
+          imagesByProduct[img.product_id][img.position || 0] = img.url
+        })
+
+        // Index customizations by product.
+        const customizationsByProduct: { [key: number]: Customization[] } = {}
+        customizationsData?.forEach((cust: any) => {
+          if (!customizationsByProduct[cust.product_id]) {
+            customizationsByProduct[cust.product_id] = []
+          }
+          
+          const options = cust.customization_options || []
+          const priceDelta: { [key: string]: number } = {}
+          
+          options.forEach((opt: any) => {
+            priceDelta[opt.option_value] = opt.price_delta || 0
+          })
+
+          customizationsByProduct[cust.product_id].push({
+            type: cust.type,
+            label: cust.label || cust.type,
+            options: options.map((opt: any) => opt.option_value),
+            priceDelta,
+          })
+        })
+
+        // Combine everything into product objects.
         const formattedProducts: Product[] = productsData?.map((p: any) => ({
           id: p.id,
           name: p.name,
@@ -48,10 +106,8 @@ export function useProducts() {
           description: p.description,
           detailedDescription: p.detailed_description,
           specifications: p.specifications || {},
-          images: (p.product_images || [])
-            .slice()
-            .sort((a: any, b: any) => (a.position || 0) - (b.position || 0))
-            .map((img: any) => img.url),
+          images: imagesByProduct[p.id] || [],
+          customizations: customizationsByProduct[p.id] || [],
           community_designed: p.community_designed || false,
         })) || []
 

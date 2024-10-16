@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { Product } from "@/lib/types/product";
 
-/** Returns all products with their images assembled. */
+/** Returns all products with images and customizations assembled. */
 export async function GET(req: NextRequest) {
   try {
     const supabase = await createClient()
@@ -17,10 +17,22 @@ export async function GET(req: NextRequest) {
 
     const { data: imagesData, error: imagesError } = await supabase
       .from("product_images")
-      .select("product_id, url, position")
+      .select("*")
       .order("product_id, position")
 
     if (imagesError) throw imagesError
+
+    const { data: customizationsData, error: customizationsError } = await supabase
+      .from("product_customizations")
+      .select(`
+        *,
+        customization_options (
+          option_value,
+          price_delta
+        )
+      `)
+
+    if (customizationsError) throw customizationsError
 
     const imagesByProduct: { [key: number]: string[] } = {}
     imagesData?.forEach((img: any) => {
@@ -28,6 +40,27 @@ export async function GET(req: NextRequest) {
         imagesByProduct[img.product_id] = []
       }
       imagesByProduct[img.product_id][img.position || 0] = img.url
+    })
+
+    const customizationsByProduct: { [key: number]: any[] } = {}
+    customizationsData?.forEach((cust: any) => {
+      if (!customizationsByProduct[cust.product_id]) {
+        customizationsByProduct[cust.product_id] = []
+      }
+
+      const options = cust.customization_options || []
+      const priceDelta: { [key: string]: number } = {}
+
+      options.forEach((opt: any) => {
+        priceDelta[opt.option_value] = opt.price_delta || 0
+      })
+
+      customizationsByProduct[cust.product_id].push({
+        type: cust.type,
+        label: cust.label || cust.type,
+        options: options.map((opt: any) => opt.option_value),
+        priceDelta,
+      })
     })
 
     const formattedProducts: Product[] = productsData?.map((p: any) => ({
@@ -40,6 +73,7 @@ export async function GET(req: NextRequest) {
       detailedDescription: p.detailed_description,
       specifications: p.specifications || {},
       images: imagesByProduct[p.id] || [],
+      customizations: customizationsByProduct[p.id] || [],
       community_designed: p.community_designed || false,
       created_at: p.created_at,
       updated_at: p.updated_at,
