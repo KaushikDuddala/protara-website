@@ -1,38 +1,60 @@
 "use client"
 
-import { Suspense } from "react"
+import { useEffect } from "react"
+import { useCart } from "@/contexts/cart-context"
+import Navigation from "@/app/components/navigation"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { CheckCircle, ArrowRight, Printer } from "lucide-react"
+import { motion } from "framer-motion"
 
-const SHIPPING = 9.99
+/** Checkout success - confirmation screen that clears the cart. */
+export default function CheckoutSuccess() {
+  const { dispatch } = useCart()
 
-function Confirmation() {
-  const searchParams = useSearchParams()
-  // order_total from the checkout session already includes shipping...
-  const orderTotal = searchParams.get("order_total") ?? "0"
-  const amount = parseFloat(orderTotal) + SHIPPING
+  useEffect(() => {
+    dispatch({ type: "CLEAR_CART" })
+  }, [dispatch])
 
   return (
-    <div className="text-center">
-      <h1 className="text-white text-3xl font-bold mb-4">Thank You!</h1>
-      <p className="text-white/60 mb-2">Your order has been placed successfully.</p>
-      <p className="text-white text-2xl font-bold mb-8">${amount.toFixed(2)}</p>
-      <Link
-        href="/catalogue"
-        className="inline-block bg-orange-500 hover:bg-orange-400 text-white font-semibold px-6 py-3 transition-colors"
-      >
-        Continue Shopping
-      </Link>
-    </div>
-  )
-}
+    <div className="min-h-screen bg-void text-white relative">
+      <Navigation />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(34,197,94,0.06) 0%, transparent 50%)", height: "400px", width: "100%" }} />
 
-export default function CheckoutSuccessPage() {
-  return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4">
-      <Suspense fallback={null}>
-        <Confirmation />
-      </Suspense>
+      <div className="relative container mx-auto px-4 flex items-center justify-center pt-40 pb-28 min-h-[80vh]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="bg-obsidian border border-green-500/20 p-10 rounded-none text-center max-w-md w-full"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
+          >
+            <div className="w-20 h-20 bg-green-900/30 border border-green-500/40 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="h-10 w-10 text-green-400" />
+            </div>
+          </motion.div>
+          <p className="text-green-400 text-sm uppercase tracking-[0.25em] mb-4">Confirmed</p>
+          <h1 className="text-3xl font-heading font-bold uppercase tracking-[-0.02em] mb-4">
+            Your order has been confirmed!
+          </h1>
+          <p className="text-lg mb-3 text-chrome">A receipt has been sent to your email.</p>
+          <p className="text-steel mb-8">Thank you for shopping with Protara. Your print is already queued for the machines.</p>
+          <div className="flex items-center justify-center gap-2 text-steel text-xs uppercase tracking-widest mb-8">
+            <Printer className="h-4 w-4 text-molten" />
+            Estimated production begins within 24 hours
+          </div>
+          <Link href="/account">
+            <Button className="w-full bg-molten hover:bg-molten-ember text-white rounded-none uppercase tracking-widest font-semibold py-4 group">
+              View Order History
+              <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-150 group-hover:translate-x-1" />
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
     </div>
   )
 }
