@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Space_Grotesk, Inter } from "next/font/google"
 import "./globals.css"
+import { AuthProvider } from "@/contexts/auth-context"
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
   description: "Custom 3D printing services and decorative 3D printed products made in Dallas.",
 }
 
+/** Root layout - global providers and fonts. */
 export default function RootLayout({
   children,
 }: {
@@ -28,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${spaceGrotesk.variable} ${inter.variable} font-body`}>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   )
