@@ -62,8 +62,16 @@ export default function ReviewForm({ productId, productName, onSuccess }: Review
         throw new Error(data.error || "Failed to submit review")
       }
 
-      // BUG: form fields and star rating are never reset after a successful submit.
       setSuccess(true)
+      setFormData({
+        title: "",
+        description: "",
+        rating: 5,
+        name: "",
+        email: "",
+        phone_number: "",
+        item_bought: productName,
+      })
 
       onSuccess?.()
 
