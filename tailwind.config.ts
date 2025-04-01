@@ -67,6 +67,9 @@ const config: Config = {
           600: "#CC3700",
         },
       },
+      fontFamily: {
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -116,6 +119,7 @@ const config: Config = {
       },
     },
   },
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config
 
 export default config
