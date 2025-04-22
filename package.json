@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.0",
     "@radix-ui/react-accordion": "^1.1.0",
     "@radix-ui/react-alert-dialog": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -26,14 +27,21 @@
     "@stripe/stripe-js": "^3.3.0",
     "@supabase/supabase-js": "^2.39.0",
     "@supabase/ssr": "^0.8.0",
+    "@tailwindcss/typography": "^0.5.10",
+    "@vercel/analytics": "^1.2.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "framer-motion": "^11.0.5",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.4",
     "lucide-react": "^0.303.0",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sharp": "^0.33.2",
     "stripe": "^14.19.0",
-    "tailwind-merge": "^2.2.0"
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20.10.4",
