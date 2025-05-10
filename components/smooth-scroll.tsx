@@ -9,11 +9,6 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion"
 
 gsap.registerPlugin(ScrollTrigger)
 
-// BUG: reads window at module scope - crashes during SSR pre-render.
-// Guard below is useless because the call itself is unguarded.
-const isBrowser = typeof window !== "undefined"
-const viewportHeight = window.innerHeight
-
 /**
  * Wraps children in Lenis normalized smooth scroll, driving GSAP ScrollTrigger
  * from it. Disabled under prefers-reduced-motion so native scroll is used.
