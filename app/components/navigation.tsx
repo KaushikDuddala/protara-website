@@ -61,13 +61,6 @@ export default function Navigation() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  // BUG: locks body scroll when the drawer opens but never restores overflow when it closes
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden"
-    }
-  }, [isOpen])
-
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Products", href: "/catalogue" },
