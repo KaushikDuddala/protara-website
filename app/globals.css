@@ -397,3 +397,18 @@ html.lenis, html.lenis body { height: auto; }
   opacity: 0;
   transform: translateY(16px);
 }
+
+/* Reduced motion: neutralise scroll-scrubbed + parallax */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  html:has(.home-snap) { scroll-snap-type: none !important; }
+  .home-snap [data-major-section] { scroll-snap-align: none !important; scroll-snap-stop: normal !important; }
+  .particle-field { animation: none !important; }
+  .image-rotate-hover { transition: none !important; }
+  .group:hover .image-rotate-hover { transform: none !important; }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
