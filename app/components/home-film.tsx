@@ -70,12 +70,10 @@ function HexStack({ size = 160, gap = 32, lit = 6, glow = false, count = 6 }: { 
   )
 }
 
-// TODO: fixed 100vh stage clips hero content on short viewports - should be min-h-screen.
-// TODO: the HomeFilm timeline always runs; add a reduced-motion branch that shows the static state.
 /** Static landing hero with the signature hex object and two CTA buttons. */
 export default function HomeFilm() {
   return (
-    <section data-major-section className="relative h-screen flex items-center justify-center bg-void overflow-hidden pt-32 pb-16">
+    <section data-major-section className="relative min-h-screen flex items-center justify-center bg-void overflow-hidden pt-32 pb-16">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(0,82,255,0.06) 0%, transparent 55%)" }}
