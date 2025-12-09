@@ -23,11 +23,9 @@ export default function ProductPage() {
   const [customizationState, setCustomizationState] = useState<{ [key: string]: string }>({})
   const [refreshReviews, setRefreshReviews] = useState(0)
 
-  // BUG: id param is missing from the deps - product resolves against the first
-  // id seen and never updates on client-side navigation between products.
   const product = useMemo(() =>
     productsData.find((p) => String(p.id) === params.id),
-    [productsData]
+    [productsData, params.id]
   )
 
   if (loading) {
