@@ -19,7 +19,7 @@
     "@radix-ui/react-switch": "1.1.2",
     "@stripe/stripe-js": "^7.7.0",
     "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.39.0",
+    "@supabase/supabase-js": "^2.87.3",
     "@tailwindcss/typography": "^0.5.20",
     "@vercel/analytics": "^1.6.1",
     "class-variance-authority": "^0.7.1",
