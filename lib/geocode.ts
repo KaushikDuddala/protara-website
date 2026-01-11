@@ -13,10 +13,7 @@ export async function geocodeLocation(location: {
   const city = location.city?.trim() || ""
   const country = location.country?.trim() || "United States"
 
-  console.log("geocoding", location)
-
   if (/^\d{5}$/.test(state)) {
-    console.log("zip lookup", state)
     try {
       const zRes = await fetch(`https://api.zippopotam.us/us/${state}`)
       if (zRes.ok) {
@@ -25,7 +22,6 @@ export async function geocodeLocation(location: {
         if (place) {
           state = place["state abbreviation"] || place.state || state
           if (place.latitude && place.longitude) {
-            console.log("zip resolved", place.latitude, place.longitude)
             return {
               lat: Number.parseFloat(place.latitude),
               lng: Number.parseFloat(place.longitude),
@@ -55,7 +51,6 @@ export async function geocodeLocation(location: {
     if (res.ok) {
       const data = await res.json()
       if (data?.[0]?.lat && data?.[0]?.lon) {
-        console.log("nominatim resolved", data[0].lat, data[0].lon)
         return {
           lat: Number.parseFloat(data[0].lat),
           lng: Number.parseFloat(data[0].lon),
