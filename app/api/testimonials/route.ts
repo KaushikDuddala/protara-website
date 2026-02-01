@@ -81,28 +81,65 @@ export async function POST(req: NextRequest) {
   }
 }
 
-/** Returns approved testimonials with the reviewer's name joined from profiles. */
+/** Returns approved testimonials with optional product info. */
 export async function GET(req: NextRequest) {
   try {
     const supabase = await createClient()
 
-    const { data, error } = await supabase
+    const { data: testimonialsData, error: testimonialsError } = await supabase
       .from("testimonials")
-      .select("*, profiles (name)")
+      .select("*")
       .eq("status", "approved")
       .order("timestamp", { ascending: false })
 
-    if (error) {
-      console.error("Database error:", error)
+    if (testimonialsError) {
+      console.error("Database error:", testimonialsError)
       return NextResponse.json(
         { error: "Failed to fetch testimonials" },
         { status: 500 }
       )
     }
 
-    const enriched = (data || []).map((t: any) => ({
+    const productIds = Array.from(new Set((testimonialsData || [])
+      .map((t: any) => t.product_id)
+      .filter(Boolean)))
+
+    let productsMap: { [k: number]: any } = {}
+    if (productIds.length > 0) {
+      const { data: productsData, error: productsError } = await supabase
+        .from("products")
+        .select("id, name, slug")
+        .in("id", productIds)
+
+      if (!productsError && productsData) {
+        const { data: imagesData } = await supabase
+          .from("product_images")
+          .select("product_id, url")
+          .in("product_id", productIds)
+
+        const imagesByProduct: { [k: number]: string[] } = {}
+        const imagesArray = Array.isArray(imagesData) ? imagesData : []
+        imagesArray.forEach((img: any) => {
+          const pid = img?.product_id
+          if (!pid) return
+          imagesByProduct[pid] = imagesByProduct[pid] || []
+          if (img.url) imagesByProduct[pid].push(img.url)
+        })
+
+        productsData.forEach((p: any) => {
+          productsMap[p.id] = {
+            id: p.id,
+            name: p.name,
+            slug: p.slug,
+            images: imagesByProduct[p.id] || [],
+          }
+        })
+      }
+    }
+
+    const enriched = (testimonialsData || []).map((t: any) => ({
       ...t,
-      user: { name: t.profiles?.name || "" },
+      product: t.product_id ? productsMap[t.product_id] || null : null,
     }))
 
     return NextResponse.json({ testimonials: enriched })
