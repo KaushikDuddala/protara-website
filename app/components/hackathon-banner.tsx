@@ -99,8 +99,7 @@ export default function HackathonBanner() {
 
   const isCompact = isHomePage && scrolled
 
-  // BUG: banner_enabled is never checked, so the banner shows even when disabled in settings.
-  if (!settings || pathname === "/cadathon" || isClosed || !isLoaded) {
+  if (!settings || !settings.banner_enabled || pathname === "/cadathon" || isClosed || !isLoaded) {
     return null
   }
 
