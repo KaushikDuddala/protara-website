@@ -49,8 +49,6 @@ export default function HomePage() {
             </h2>
             <div className="w-14 h-[2px] bg-molten mx-auto mt-6" />
           </div>
-          {/* BUG: carousel rendered twice so testimonials duplicate */}
-          <TestimonialCarousel testimonials={testimonials} />
           <TestimonialCarousel testimonials={testimonials} />
           <div className="text-center mt-12">
             <Link href="/submit-testimonial">
