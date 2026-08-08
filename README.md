@@ -1,23 +1,78 @@
-# protara-front-end
+# Protara Front-End
 
-Front end for Protara Printing: custom 3D printing services and decorative 3D printed products.
+The front-end for Protara Printing, a custom 3D printing service that sells decorative, functional, and community-designed printed products. A Next.js app backed by Supabase (auth, database, storage) and Stripe (checkout).
 
-Built with Next.js + Tailwind + Supabase + Stripe.
+## Contribution
 
-## Getting started
+See [CONTRIBUTING](CONTRIBUTING.md) for how to contribute. Please read the [code of conduct](CODE_OF_CONDUCT.md) first.
+
+## Tech Stack
+
+- **Next.js 15** (App Router): framework and server-side rendering
+- **React 19**: component model
+- **TypeScript**: typed JavaScript
+- **Tailwind CSS**: styling, with a custom dark "Cinematic Industrial" theme
+- **Supabase**: auth, Postgres database, and file storage
+- **Stripe**: payments
+- **GSAP + Lenis**: scroll animation and smooth scrolling
+- **shadcn/ui + Radix**: accessible UI primitives
+
+## Setup
+
+The repository uses `npm` as the package manager.
 
 ```bash
+git clone <your-repo-url> protara-front-end
+cd protara-front-end
 npm install
-npm run dev
 ```
 
-## Scripts
+You will need `node` installed locally (see the [Node.js website](https://nodejs.org/)).
 
-- `npm run dev`: start the dev server
-- `npm run build`: production build
-- `npm run start`: start the production server
-- `npm run lint`: lint the codebase
+### Environment Variables
 
-## Env vars
+Create a `.env.local` file in the repository root. The following variables are required for the app to run:
 
-Copy `.env.example` to `.env.local` (if present) and fill in Supabase / Stripe keys. See `.env.example` for the full list.
+```env
+NEXT_PUBLIC_SUPABASE_URL="[Supabase project URL]"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="[Supabase anon/public key]"
+SUPABASE_SERVICE_ROLE_KEY="[Supabase service role key - server only]"
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="[Stripe publishable key]"
+STRIPE_SECRET_KEY="[Stripe secret key - server only]"
+STRIPE_WEBHOOK_SECRET="[Stripe webhook signing secret - server only]"
+ADMIN_PASSWORD="[Password for the admin dashboard]"
+```
+
+Do not commit real values for these. The `.gitignore` already excludes `.env*` files.
+
+### Database
+
+The database schema, migration, and Row Level Security (RLS) files live in `supabase/`. See the [database README](supabase/README.md) for how the schema is organized and how to apply it to your Supabase project.
+
+## Running the App
+
+```bash
+npm run dev    # Start the development server
+npm run build  # Create a production build
+npm run start  # Start the production server
+npm run lint   # Run the linter (ESLint used by Next.js)
+```
+
+## Project Structure
+
+```
+app/          - Next.js App Router pages, API routes, and app-specific components
+components/   - Shared and reusable components
+    | ui      - shadcn/ui primitives
+contexts/     - React context providers (auth, cart)
+hooks/        - Custom React hooks
+lib/          - Utilities, Supabase clients, and TypeScript types
+public/       - Static assets
+supabase/     - Database schema, RLS policies, and migrations
+```
+
+## Learn More
+
+- [Next.js documentation](https://nextjs.org/docs)
+- [Supabase documentation](https://supabase.com/docs)
+- [Stripe payments documentation](https://stripe.com/docs/payments)
