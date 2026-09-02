@@ -62,6 +62,7 @@ npm run lint   # Run the linter (ESLint used by Next.js)
 
 ```
 app/          - Next.js App Router pages, API routes, and app-specific components
+agents/       - Reference docs for AI agents (also a quick on-ramp for new devs)
 components/   - Shared and reusable components
     | ui      - shadcn/ui primitives
 contexts/     - React context providers (auth, cart)
@@ -70,6 +71,21 @@ lib/          - Utilities, Supabase clients, and TypeScript types
 public/       - Static assets
 supabase/     - Database schema, RLS policies, and migrations
 ```
+
+## Documentation
+
+Additional documentation:
+
+- **agents/**: reference docs for AI agents (architecture, routes, API, components, database, design system, and coding conventions). Kept small, it also works as a quick reference for new developers.
+
+## AI-Assisted Development
+
+AI coding assistants are used occasionally. The rules:
+
+- **Humans make the decisions.** An assistant never decides what lands in the repo.
+- **Humans read everything.** Every AI-assisted pull request is reviewed by a person before it merges.
+
+Assistant output gets included only when it is needed for the change at hand. Output that no one understands, or that is not required, gets dropped. The `agents/` folder gives an assistant the context to do useful work, and doubles as a quick reference for new developers.
 
 ## Learn More
 
